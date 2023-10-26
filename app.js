@@ -24,10 +24,15 @@ const server = http.createServer((req, res) => {
     return req.on("end", () => {
       const parsedBody = Buffer.concat(body).toString();
       const message = parsedBody.split("=")[1];
-      fs.writeFileSync("message.txt", message);
-      res.statusCode = 302;
-      res.setHeader("Location", "/");
-      return res.end();
+
+      // writeFileSync: block further code
+      //   fs.writeFileSync("message.txt", message);
+
+      return fs.writeFile("message.txt", message, (error) => {
+        res.statusCode = 302;
+        res.setHeader("Location", "/");
+        return res.end();
+      });
     });
   }
   res.setHeader("Content-Header", "text/html");
