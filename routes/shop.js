@@ -9,8 +9,7 @@ const { products } = require("./admin");
 const router = express.Router();
 
 router.get("/", (req, res, next) => {
-  console.log(products);
-  res.render("shop");
+  res.render("shop", { prods: products, pageTitle: "Shop" });
   // res.sendFile(path.join(rootDir, "views", "shop.html"));
 });
 
