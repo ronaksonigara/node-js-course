@@ -3,6 +3,7 @@ const express = require("express");
 const {
   getIndex,
   getProducts,
+  getProduct,
   getCart,
   getOrders,
   getCheckout,
@@ -13,6 +14,8 @@ const router = express.Router();
 router.get("/", getIndex);
 
 router.get("/products", getProducts);
+
+router.get("/product/:productId", getProduct);
 
 router.get("/cart", getCart);
 
