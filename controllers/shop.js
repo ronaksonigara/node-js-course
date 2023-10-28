@@ -13,8 +13,15 @@ exports.getProducts = (req, res, next) => {
 exports.getProduct = (req, res, next) => {
   const productId = req.params.productId;
   Product.finById(productId, (product) => {
-    console.log(product);
-    res.redirect("/");
+    if (!product) {
+      res.redirect("/404");
+    } else {
+      res.render("shop/product-detail", {
+        product,
+        pageTitle: product.title,
+        path: "/products",
+      });
+    }
   });
 };
 
