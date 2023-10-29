@@ -14,7 +14,13 @@ const app = express();
 app.set("view engine", "ejs");
 app.set("views", "views");
 
-db.execute("SELECT * FROM products").then().catch();
+db.execute("SELECT * FROM products")
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
