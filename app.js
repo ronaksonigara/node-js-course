@@ -3,6 +3,7 @@ const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 
+const db = require("./util/database");
 const { get404 } = require("./controllers/error");
 
 const adminRoutes = require("./routes/admin");
@@ -12,6 +13,8 @@ const app = express();
 
 app.set("view engine", "ejs");
 app.set("views", "views");
+
+// db.execute("SELECT");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
