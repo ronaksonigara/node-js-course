@@ -15,17 +15,15 @@ exports.getProducts = (req, res, next) => {
 
 exports.getProduct = (req, res, next) => {
   const productId = req.params.productId;
-  Product.finById(productId, (product) => {
-    if (!product) {
-      res.redirect("/404");
-    } else {
+  Product.finById(productId)
+    .then(([product]) => {
       res.render("shop/product-detail", {
-        product,
-        pageTitle: product.title,
+        product: product[0],
+        pageTitle: product[0]?.title,
         path: "/products",
       });
-    }
-  });
+    })
+    .catch((error) => console.log(error));
 };
 
 exports.getIndex = (req, res, next) => {
