@@ -4,7 +4,7 @@
 <body>
     <%- include('../includes/navigation.ejs') %>
     <main>
-        <% if(cart) { %>
+        <% if(cart.products.length) { %>
             <div>
                 <ol>
                     <% for(let product of cart.products) { %>

@@ -8,12 +8,15 @@ const filePath = path.join(rootDir, "data", "cart.json");
 const getProductsFromFile = (cb) => {
   fs.readFile(filePath, (error, fileContent) => {
     if (error) {
-      cb({
-        products: [],
-        totalPrice: 0,
-      });
+      cb(
+        {
+          products: [],
+          totalPrice: 0,
+        },
+        true
+      );
     } else {
-      cb(JSON.parse(fileContent));
+      cb(JSON.parse(fileContent), false);
     }
   });
 };
@@ -33,12 +36,15 @@ module.exports = class Cart {
       // Add new product/ increase quantity
       if (existingProductIndex !== -1) {
         const existingProduct = cart.products[existingProductIndex];
-        updatedProduct = { ...existingProduct, qty: existingProduct.qty + 1 };
+        updatedProduct = {
+          ...existingProduct,
+          quantity: existingProduct.quantity + 1,
+        };
         cart.products[existingProductIndex] = updatedProduct;
       } else {
         updatedProduct = {
           id: id,
-          qty: 1,
+          quantity: 1,
         };
         cart.products = [...cart.products, updatedProduct];
       }
@@ -56,13 +62,23 @@ module.exports = class Cart {
     getProductsFromFile((cart) => {
       const product = cart.products.find((product) => product.id === id);
       cart.products = cart.products.filter((product) => product.id !== id);
-      cart.totalPrice = cart.totalPrice - product.qty * productPrice;
+      cart.totalPrice = cart.totalPrice - product.quantity * productPrice;
       fs.writeFile(filePath, JSON.stringify(cart), (error) => {
         console.log(error);
         if (!error) {
           cb();
         }
       });
+    });
+  }
+
+  static getCart(cb) {
+    getProductsFromFile((cart, isError) => {
+      if (isError) {
+        cb(null);
+      } else {
+        cb(cart);
+      }
     });
   }
 };

@@ -10,9 +10,9 @@ const filePath = path.join(rootDir, "data", "product.json");
 const getProductsFromFile = (cb) => {
   fs.readFile(filePath, (error, fileContent) => {
     if (error) {
-      cb([]);
+      cb([], true);
     } else {
-      cb(JSON.parse(fileContent));
+      cb(JSON.parse(fileContent), false);
     }
   });
 };
