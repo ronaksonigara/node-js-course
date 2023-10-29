@@ -115,7 +115,29 @@ exports.postEditProduct = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
   const id = req.body.productId;
-  Product.deleteById(id, () => {
-    res.redirect("/admin/products");
-  });
+
+  Product.destroy({
+    where: {
+      id,
+    },
+  })
+    .then(() => {
+      console.log("Destroyed");
+      res.redirect("/admin/products");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+  // Product.findByPk(id)
+  //   .then((product) => {
+  //     return product.destroy();
+  //   })
+  //   .then(() => {
+  //     console.log("Destroyed");
+  //     res.redirect("/admin/products");
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
 };
