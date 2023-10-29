@@ -61,6 +61,10 @@ module.exports = class Cart {
   static deleteProduct(id, productPrice, cb) {
     getProductsFromFile((cart) => {
       const product = cart.products.find((product) => product.id === id);
+      if (!product) {
+        cb();
+        return;
+      }
       cart.products = cart.products.filter((product) => product.id !== id);
       cart.totalPrice = cart.totalPrice - product.quantity * productPrice;
       fs.writeFile(filePath, JSON.stringify(cart), (error) => {
