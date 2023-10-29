@@ -39,28 +39,32 @@ exports.getEditProduct = (req, res, next) => {
 
   const productId = req.params.productId;
 
-  Product.finById(productId, (product) => {
-    if (!product) {
-      res.redirect("/404");
-    } else {
+  Product.findByPk(productId)
+    .then((product) => {
       res.render("admin/edit-product", {
         pageTitle: "Edit Product",
         path: "/admin/edit-product",
         editing: editMode === "true",
         product,
       });
-    }
-  });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll((products) => {
-    res.render("admin/products", {
-      prods: products,
-      pageTitle: "Admin Products",
-      path: "/admin/products",
+  Product.findAll()
+    .then((products) => {
+      res.render("admin/products", {
+        prods: products,
+        pageTitle: "Admin Products",
+        path: "/admin/products",
+      });
+    })
+    .catch((error) => {
+      console.log(error);
     });
-  });
 };
 
 exports.postEditProduct = (req, res, next) => {
