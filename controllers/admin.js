@@ -22,7 +22,7 @@ exports.postAddProduct = (req, res, next) => {
   })
     .then((result) => {
       console.log("Created Product");
-      // res.redirect("/");
+      res.redirect("/");
     })
     .catch(() => {
       console.log(error);
