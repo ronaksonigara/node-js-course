@@ -161,11 +161,23 @@ exports.getCheckout = (req, res, next) => {
   });
 };
 
-exports.postcartDeleteProduct = (req, res, next) => {
+exports.postCartDeleteProduct = (req, res, next) => {
   const productId = req.body.productId;
   const productPrice = req.body.productPrice;
 
-  Cart.deleteProduct(productId, productPrice, () => {
-    res.redirect("/cart");
-  });
+  req.user
+    .getCart()
+    .then((cart) => {
+      return cart.getProducts({ where: { id: productId } });
+    })
+    .then((products) => {
+      const product = products[0];
+      return product.cartItem.destroy();
+    })
+    .then(() => {
+      res.redirect("/cart");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
