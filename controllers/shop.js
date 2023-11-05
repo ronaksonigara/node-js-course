@@ -57,40 +57,68 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-  Cart.getCart((cart) => {
-    Product.fetchAll((products) => {
-      const cartProducts = [];
-      for (let product of products) {
-        const cartProductData = cart.products.find(
-          (cartProduct) => cartProduct.id === product.id
-        );
-        if (cartProductData) {
-          cartProducts.push({
-            ...product,
-            quantity: cartProductData.quantity,
+  req.user
+    .getCart()
+    .then((cart) => {
+      console.log(cart);
+      return cart
+        .getProducts()
+        .then((products) => {
+          console.log(products);
+          res.render("shop/cart", {
+            path: "/cart",
+            pageTitle: "Your Cart",
+            cart: {
+              ...cart,
+              products: products,
+            },
           });
-        }
-      }
-
-      res.render("shop/cart", {
-        path: "/cart",
-        pageTitle: "Your Cart",
-        cart: {
-          ...cart,
-          products: cartProducts,
-        },
-      });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    })
+    .catch((error) => {
+      console.log(error);
     });
-  });
+
+  // Cart.getCart((cart) => {
+  //   Product.fetchAll((products) => {
+  //     const cartProducts = [];
+  //     for (let product of products) {
+  //       const cartProductData = cart.products.find(
+  //         (cartProduct) => cartProduct.id === product.id
+  //       );
+  //       if (cartProductData) {
+  //         cartProducts.push({
+  //           ...product,
+  //           quantity: cartProductData.quantity,
+  //         });
+  //       }
+  //     }
+
+  //     res.render("shop/cart", {
+  //       path: "/cart",
+  //       pageTitle: "Your Cart",
+  //       cart: {
+  //         ...cart,
+  //         products: cartProducts,
+  //       },
+  //     });
+  //   });
+  // });
 };
 
 exports.postCart = (req, res, next) => {
   const productId = req.body.productId;
-  Product.finById(productId, (product) => {
-    Cart.addProduct(productId, product.price, () => {
-      res.redirect("/cart");
-    });
-  });
+
+  // Product
+
+  // Product.finById(productId, (product) => {
+  //   Cart.addProduct(productId, product.price, () => {
+  //     res.redirect("/cart");
+  //   });
+  // });
 };
 
 exports.getOrders = (req, res, next) => {
