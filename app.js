@@ -5,10 +5,10 @@ const bodyParser = require("body-parser");
 
 const { get404 } = require("./controllers/error");
 
-// const adminRoutes = require("./routes/admin");
+const adminRoutes = require("./routes/admin");
 // const shopRouter = require("./routes/shop");
 
-const mongoConnect = require("./util/database");
+const { mongoConnect } = require("./util/database");
 
 const app = express();
 
@@ -28,14 +28,15 @@ app.use((req, res, next) => {
   //   .catch((error) => {
   //     console.log(error);
   //   });
+
+  next();
 });
 
-// app.use("/admin", adminRoutes);
+app.use("/admin", adminRoutes);
 // app.use(shopRouter);
 
 app.use(get404);
 
-mongoConnect((client) => {
-  console.log(client);
+mongoConnect(() => {
   app.listen(3000);
 });

@@ -1,6 +1,6 @@
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const uri =
-  "mongodb+srv://root:root1234@cluster0.hng1qpr.mongodb.net/?retryWrites=true&w=majority";
+  "mongodb+srv://root:root1234@cluster0.hng1qpr.mongodb.net/shop?retryWrites=true&w=majority";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -11,16 +11,28 @@ const client = new MongoClient(uri, {
   },
 });
 
+let _db;
+
 const mongoConnect = (callback) => {
   client
     .connect()
     .then((client) => {
       console.log("Connected");
-      callback(client);
+      _db = client.db();
+      callback();
     })
     .catch((error) => {
       console.log(error);
+      throw error;
     });
 };
 
-module.exports = mongoConnect;
+const getDb = () => {
+  if (_db) {
+    return _db;
+  }
+
+  throw "No database found!";
+};
+
+module.exports = { mongoConnect, getDb };
