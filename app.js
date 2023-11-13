@@ -3,18 +3,12 @@ const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 
-const sequelize = require("./util/database");
-const Product = require("./models/product");
-const User = require("./models/user");
-const Cart = require("./models/cart");
-const CartItem = require("./models/cart-item");
-const Order = require("./models/order");
-const OrderItem = require("./models/order-item");
-
 const { get404 } = require("./controllers/error");
 
-const adminRoutes = require("./routes/admin");
-const shopRouter = require("./routes/shop");
+// const adminRoutes = require("./routes/admin");
+// const shopRouter = require("./routes/shop");
+
+const mongoConnect = require("./util/database");
 
 const app = express();
 
@@ -26,54 +20,22 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use((req, res, next) => {
-  User.findByPk(1)
-    .then((user) => {
-      req.user = user;
-      next();
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  // User.findByPk(1)
+  //   .then((user) => {
+  //     req.user = user;
+  //     next();
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
 });
 
-app.use("/admin", adminRoutes);
-app.use(shopRouter);
+// app.use("/admin", adminRoutes);
+// app.use(shopRouter);
 
 app.use(get404);
 
-Product.belongsTo(User, {
-  constraints: true,
-  onDelete: "CASCADE",
+mongoConnect((client) => {
+  console.log(client);
+  app.listen(3000);
 });
-User.hasMany(Product);
-
-User.hasOne(Cart);
-Cart.belongsTo(User);
-
-Cart.belongsToMany(Product, { through: CartItem });
-Product.belongsToMany(Cart, { through: CartItem });
-
-Order.belongsTo(User);
-User.hasMany(Order);
-Order.belongsToMany(Product, { through: OrderItem });
-
-sequelize
-  // .sync({ force: true })
-  .sync()
-  .then((result) => {
-    return User.findByPk(1);
-  })
-  .then((user) => {
-    if (!user) {
-      return User.create({ name: "test", email: "test@test.com" });
-    }
-    return user;
-    // return  Promise.resolve(user)
-  })
-  .then((user) => {
-    return user.createCart();
-  })
-  .then((cart) => {
-    app.listen(3000);
-  })
-  .catch((error) => console.log(error));
