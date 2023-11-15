@@ -63,7 +63,7 @@ exports.getProducts = (req, res, next) => {
   Product.fetchAll()
     .then((products) => {
       res.render("admin/products", {
-        prods: products,
+        products: products,
         pageTitle: "Admin Products",
         path: "/admin/products",
       });
