@@ -32,7 +32,7 @@ class Product {
     return db.collection("products").find().toArray();
   }
 
-  static fetchById(productId) {
+  static findById(productId) {
     const db = getDb();
     return db.collection("products").findOne({ _id: new ObjectId(productId) });
   }

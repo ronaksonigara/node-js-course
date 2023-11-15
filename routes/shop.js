@@ -22,7 +22,7 @@ router.get("/product/:productId", getProduct);
 
 // router.get("/cart", getCart);
 
-// router.post("/cart", postCart);
+router.post("/cart", postCart);
 
 // router.post("/create-order", postOrder);
 
