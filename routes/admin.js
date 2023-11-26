@@ -12,7 +12,7 @@ const {
 const router = express.Router();
 
 // /admin/products => GET
-// router.get("/products", getProducts);
+router.get("/products", getProducts);
 
 // /admin/add-product => GET
 router.get("/add-product", getAddProduct);
