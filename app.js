@@ -3,12 +3,14 @@ const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 
+const mongoose = require("mongoose");
+
+const { uri } = require("./util/database");
+
 const { get404 } = require("./controllers/error");
 
 const adminRoutes = require("./routes/admin");
 const shopRouter = require("./routes/shop");
-
-const { mongoConnect } = require("./util/database");
 
 const User = require("./models/user");
 
@@ -37,6 +39,7 @@ app.use(shopRouter);
 
 app.use(get404);
 
-mongoConnect(() => {
+mongoose.connect(uri).then(() => {
+  console.log("Mongo Connected!!");
   app.listen(3000);
 });

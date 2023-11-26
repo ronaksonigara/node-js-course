@@ -12,18 +12,18 @@ const {
 const router = express.Router();
 
 // /admin/products => GET
-router.get("/products", getProducts);
+// router.get("/products", getProducts);
 
-// /admin/add-product => GET
-router.get("/add-product", getAddProduct);
+// // /admin/add-product => GET
+// router.get("/add-product", getAddProduct);
 
-// /admin/add-product => POST
-router.post("/add-product", postAddProduct);
+// // /admin/add-product => POST
+// router.post("/add-product", postAddProduct);
 
-router.get("/edit-product/:productId", getEditProduct);
+// router.get("/edit-product/:productId", getEditProduct);
 
-router.post("/edit-product", postEditProduct);
+// router.post("/edit-product", postEditProduct);
 
-router.post("/delete-product", postDeleteProduct);
+// router.post("/delete-product", postDeleteProduct);
 
 module.exports = router;
