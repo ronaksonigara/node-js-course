@@ -12,7 +12,7 @@ const { get404 } = require("./controllers/error");
 const adminRoutes = require("./routes/admin");
 const shopRouter = require("./routes/shop");
 
-const User = require("./models/user");
+// const User = require("./models/user");
 
 const app = express();
 
@@ -23,16 +23,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use((req, res, next) => {
-  User.findById("6553c5794216375ddadd3e7c")
-    .then((user) => {
-      req.user = new User(user.name, user.email, user.cart, user._id);
-      next();
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-});
+// app.use((req, res, next) => {
+//   User.findById("6553c5794216375ddadd3e7c")
+//     .then((user) => {
+//       req.user = new User(user.name, user.email, user.cart, user._id);
+//       next();
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     });
+// });
 
 app.use("/admin", adminRoutes);
 app.use(shopRouter);

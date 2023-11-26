@@ -1,4 +1,4 @@
-const { Schema } = require("mongoose");
+const { Schema, model } = require("mongoose");
 
 const productSchema = new Schema({
   title: {
@@ -19,48 +19,50 @@ const productSchema = new Schema({
   },
 });
 
-class Product {
-  constructor(title, price, description, imageUrl, _id, userId) {
-    this.title = title;
-    this.price = price;
-    this.description = description;
-    this.imageUrl = imageUrl;
-    this._id = _id;
-    this.userId = userId;
-  }
+module.exports = model("Product", productSchema);
 
-  save() {
-    const db = getDb();
+// class Product {
+//   constructor(title, price, description, imageUrl, _id, userId) {
+//     this.title = title;
+//     this.price = price;
+//     this.description = description;
+//     this.imageUrl = imageUrl;
+//     this._id = _id;
+//     this.userId = userId;
+//   }
 
-    if (this._id) {
-      const { _id, ...rest } = this;
-      return db.collection("products").updateOne(
-        { _id: new ObjectId(_id) },
-        {
-          $set: rest,
-        }
-      );
-    }
+//   save() {
+//     const db = getDb();
 
-    return db.collection("products").insertOne(this);
-  }
+//     if (this._id) {
+//       const { _id, ...rest } = this;
+//       return db.collection("products").updateOne(
+//         { _id: new ObjectId(_id) },
+//         {
+//           $set: rest,
+//         }
+//       );
+//     }
 
-  static fetchAll() {
-    const db = getDb();
-    return db.collection("products").find().toArray();
-  }
+//     return db.collection("products").insertOne(this);
+//   }
 
-  static findById(productId) {
-    const db = getDb();
-    return db.collection("products").findOne({ _id: new ObjectId(productId) });
-  }
+//   static fetchAll() {
+//     const db = getDb();
+//     return db.collection("products").find().toArray();
+//   }
 
-  static deleteById(productId) {
-    const db = getDb();
-    return db
-      .collection("products")
-      .deleteOne({ _id: new ObjectId(productId) });
-  }
-}
+//   static findById(productId) {
+//     const db = getDb();
+//     return db.collection("products").findOne({ _id: new ObjectId(productId) });
+//   }
 
-module.exports = Product;
+//   static deleteById(productId) {
+//     const db = getDb();
+//     return db
+//       .collection("products")
+//       .deleteOne({ _id: new ObjectId(productId) });
+//   }
+// }
+
+// module.exports = Product;
