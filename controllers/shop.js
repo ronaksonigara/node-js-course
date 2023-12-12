@@ -49,11 +49,14 @@ exports.getCart = (req, res, next) => {
   req.user
     .populate("cart.items.productId")
     .then((user) => {
-      const products = user.cart.items;
+      const products = [...user.cart.items].map((product) => {
+        return { ...product.productId._doc, quantity: product.quantity };
+      });
       res.render("shop/cart", {
         path: "/cart",
         pageTitle: "Your Cart",
         products: products,
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((error) => {
