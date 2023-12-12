@@ -45,14 +45,17 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  User.findById("656e1066eb7bf98d075ffd58")
+  if (!req.session.user) return next();
+  User.findById(req.session.user._id)
     .then((user) => {
-      req.user = user;
-      next();
+      if (user) {
+        req.user = user;
+        next();
+      } else {
+        res.redirect("/login");
+      }
     })
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch((err) => console.log(err));
 });
 
 app.use("/admin", adminRoutes);
