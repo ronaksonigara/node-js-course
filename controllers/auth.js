@@ -7,6 +7,21 @@ exports.getLogin = (req, res, next) => {
 };
 
 exports.postLogin = (req, res, next) => {
-  req.session.isLoggedIn = true;
-  res.redirect("/");
+  User.findById("656e1066eb7bf98d075ffd58")
+    .then((user) => {
+      req.session.user = user;
+      req.session.isLoggedIn = true;
+      req.session.save((error) => {
+        if (error) console.log(error);
+        res.redirect("/");
+      });
+    })
+    .catch((error) => console.log(error));
+};
+
+exports.postLogout = (req, res, next) => {
+  req.session.destroy((error) => {
+    if (error) console.log(error);
+    res.redirect("/");
+  });
 };
