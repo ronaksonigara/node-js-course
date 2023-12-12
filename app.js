@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 const session = require("express-session");
+const MongoDBStore = require("connect-mongodb-session")(session);
 
 const { uri } = require("./util/database");
 
@@ -19,6 +20,16 @@ const User = require("./models/user");
 
 const app = express();
 
+var store = new MongoDBStore({
+  uri,
+  collection: "sessions",
+});
+
+// Catch errors
+store.on("error", function (error) {
+  console.log(error);
+});
+
 app.set("view engine", "ejs");
 app.set("views", "views");
 
@@ -29,6 +40,7 @@ app.use(
     secret: "my secret",
     resave: false,
     saveUninitialized: false,
+    store: store,
   })
 );
 
