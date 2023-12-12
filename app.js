@@ -11,6 +11,7 @@ const { get404 } = require("./controllers/error");
 
 const adminRoutes = require("./routes/admin");
 const shopRouter = require("./routes/shop");
+const authRouter = require("./routes/auth");
 
 const User = require("./models/user");
 
@@ -36,6 +37,7 @@ app.use((req, res, next) => {
 
 app.use("/admin", adminRoutes);
 app.use(shopRouter);
+app.use(authRouter);
 
 app.use(get404);
 
