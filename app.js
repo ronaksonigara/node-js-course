@@ -5,6 +5,8 @@ const bodyParser = require("body-parser");
 
 const mongoose = require("mongoose");
 
+const session = require("express-session");
+
 const { uri } = require("./util/database");
 
 const { get404 } = require("./controllers/error");
@@ -21,8 +23,14 @@ app.set("view engine", "ejs");
 app.set("views", "views");
 
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use(express.static(path.join(__dirname, "public")));
+app.use(
+  session({
+    secret: "my secret",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 app.use((req, res, next) => {
   User.findById("656e1066eb7bf98d075ffd58")
