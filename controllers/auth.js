@@ -8,6 +8,6 @@ exports.getLogin = (req, res, next) => {
 
 exports.postLogin = (req, res, next) => {
   req.isLoggedIn = true;
-  console.log(req.isLoggedIn);
+  res.setHeader("Set-Cookie", "loggedIn=true");
   res.redirect("/");
 };
